@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { --background: 240 33% 99%; --foreground: 222 47% 11%; --card: 0 0% 100%; --card-foreground: 222 47% 11%; --primary: 248 84% 62%; --primary-foreground: 0 0% 100%; --muted: 246 28% 97%; --muted-foreground: 215 16% 47%; --border: 240 16% 91%; --input: 240 16% 89%; --ring: 248 84% 62%; }
+  * { @apply border-border; }
+  html { color-scheme: light; }
+  body { @apply min-h-screen bg-[#fafaff] text-slate-950 antialiased; }
+  ::selection { @apply bg-violet-200 text-violet-950; }
+  button, input, textarea { @apply focus-visible:outline-none; }
+}
+
+@layer utilities {
+  .account-indigo { background: linear-gradient(135deg, #ede9fe, #c4b5fd); }
+  .account-slate { background: linear-gradient(135deg, #ecfeff, #a5f3fc); }
+  .account-amber { background: linear-gradient(135deg, #fffbeb, #fde68a); }
+}
