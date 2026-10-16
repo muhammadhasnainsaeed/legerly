@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+build/
+
+# Tooling output
+coverage/
+*.tsbuildinfo
+*.log
+
+# Local environment and credentials
+.env*
+!.env.example
+*.pem
+
+# Editor and operating system files
+.DS_Store
+.vercel/
+.vscode/
