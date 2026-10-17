@@ -33,8 +33,10 @@ pnpm exec tsc --noEmit        # required verification; currently passes clean
 
 - There is **no test runner and no test script**. Do not claim tests pass; verify
   with `pnpm build` plus `pnpm exec tsc --noEmit`.
-- **Do not rely on `pnpm lint`.** It maps to the deprecated `next lint`, there is
-  no ESLint config in the repo, and it stops on an interactive setup prompt.
+- **Lint** is `pnpm lint` (ESLint flat config in `eslint.config.mjs`, based on
+  `eslint-config-next`). It runs non-interactive; treat lint **errors** as build
+  blockers (they fail `pnpm build`). It currently reports one known
+  `no-unused-vars` **warning** (unused `Progress` import in `overview-page.tsx`).
 - There is no CI and no `.env`; the app needs no secrets to run.
 
 ## Architecture map
