@@ -35,6 +35,5 @@ export function FormMessage({ className, children, ...props }: React.HTMLAttribu
   const { getFieldState, formState } = useFormContext();
   const message = field ? getFieldState(field.name, formState).error?.message : undefined;
   const body = message ?? children;
-  if (!body) return null;
-  return <p id={`${field?.name}-message`} className={cn("text-xs font-medium text-red-600", className)} {...props}>{body}</p>;
+  return <p id={`${field?.name}-message`} className={cn("text-xs font-medium text-red-600", !body && "sr-only", className)} {...props}>{body}</p>;
 }
