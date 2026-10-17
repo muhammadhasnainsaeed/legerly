@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { Plus, ShieldCheck } from "lucide-react";
 import { AccountCard } from "@/components/dashboard/account-card";
 import { PageHeader } from "@/components/dashboard/page-header";
@@ -10,14 +10,40 @@ import { Card, CardContent } from "@/components/ui/card";
 import { accounts, isDemoBank, type Account } from "@/lib/mock-data";
 import { formatCurrency } from "@/lib/formatters";
 
+const DEMO_CONNECTED_ACCOUNT: Account = {
+  id: "demo-connected",
+  name: "",
+  type: "Checking",
+  number: "•••• 0192",
+  balance: 5640,
+  available: 5640,
+  color: "account-indigo",
+  updated: "Updated just now",
+};
+
+let cachedBank: string | null | undefined;
+let cachedAccount: Account | null;
+
+function readConnectedAccount(): Account | null {
+  if (typeof window === "undefined") return null;
+  const bank = window.localStorage.getItem("ledgerly-connected-bank");
+  if (bank === cachedBank) return cachedAccount ?? null;
+  cachedBank = bank;
+  cachedAccount = bank && isDemoBank(bank) ? { ...DEMO_CONNECTED_ACCOUNT, name: `${bank} checking` } : null;
+  return cachedAccount;
+}
+
+function subscribeToConnectedBank(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  return () => window.removeEventListener("storage", onStoreChange);
+}
+
 export function AccountsPage() {
-  const [connectedAccount, setConnectedAccount] = useState<Account | null>(null);
-  useEffect(() => {
-    const bank = window.localStorage.getItem("ledgerly-connected-bank");
-    if (bank && isDemoBank(bank)) {
-      setConnectedAccount({ id: "demo-connected", name: `${bank} checking`, type: "Checking", number: "•••• 0192", balance: 5640, available: 5640, color: "account-indigo", updated: "Updated just now" });
-    }
-  }, []);
+  const connectedAccount = useSyncExternalStore(
+    subscribeToConnectedBank,
+    readConnectedAccount,
+    () => null,
+  );
   const displayedAccounts = connectedAccount ? [...accounts, connectedAccount] : accounts;
   const total = displayedAccounts.reduce((sum, account) => sum + account.balance, 0);
   return <>

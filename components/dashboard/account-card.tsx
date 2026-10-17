@@ -8,10 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-const accountIcon = (type: string) => type === "Checking" ? Landmark : type === "Savings" ? Wallet : CreditCard;
+const ACCOUNT_ICONS: Record<string, typeof Landmark> = {
+  Checking: Landmark,
+  Savings: Wallet,
+};
 
 export function AccountCard({ account }: { account: Account }) {
-  const Icon = accountIcon(account.type);
+  const Icon = ACCOUNT_ICONS[account.type] ?? CreditCard;
   return <Dialog>
     <Card className="group overflow-hidden p-5 transition-shadow hover:shadow-md">
       <div className="flex items-start justify-between"><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-lg bg-slate-100 text-slate-700"><Icon className="h-5 w-5" /></span><div><p className="font-medium text-slate-900">{account.name}</p><p className="mt-0.5 text-xs text-slate-500">{account.type} · {account.number}</p></div></div><DialogTrigger asChild><Button variant="ghost" size="icon" aria-label={`View details for ${account.name}`} className="h-8 w-8"><ArrowUpRight className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></Button></DialogTrigger></div>
