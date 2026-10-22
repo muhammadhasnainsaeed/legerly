@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 const createAuthSchema = (isSignIn: boolean) => z.object({
   firstName: z.string().trim(),
   lastName: z.string().trim(),
-  email: z.string().trim().email("Enter a valid email address."),
+  email: z.email("Enter a valid email address."),
   password: z.string().min(8, "Password must be at least 8 characters."),
   confirmPassword: z.string(),
 }).superRefine((values, context) => {
@@ -49,7 +49,12 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
   const continueToDemo = () => {
     window.localStorage.setItem("ledgerly-demo", "active");
-    setSubmitted(true);
+    console.log("Demo started");
+    if (!isSignIn) {
+      console.log("Sign-up form values:", form.getValues());
+    }
+    console.log("Sign-in values:", form.getValues().email, form.getValues().password);
+    setSubmitted(true);  
     router.push("/");
   };
 
